@@ -28,7 +28,7 @@ public class ItemService {
         return list;
     }
 
-    public ResponseEntity<?> deleteItem(UUID itemId) {
+    public ResponseEntity<Object> deleteItem(UUID itemId) {
         if (this.repository.findById(itemId).isPresent()) {
             this.repository.deleteById(itemId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);

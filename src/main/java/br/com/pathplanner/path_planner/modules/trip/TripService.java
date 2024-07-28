@@ -68,7 +68,6 @@ public class TripService {
           return ResponseEntity.ok(new TripCreateResponse(newTrip.getId()));
       }
 
-      // Use a mapper to make this be a TripDto
      public ResponseEntity<TripDto> getTripDetails(@PathVariable UUID id){
         Optional<Trip> trip = getTrip(id);
 

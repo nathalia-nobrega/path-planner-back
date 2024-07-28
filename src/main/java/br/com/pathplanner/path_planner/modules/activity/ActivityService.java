@@ -43,10 +43,10 @@ public class ActivityService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<?> deleteActivity(UUID activityId) {
+    public ResponseEntity<Object> deleteActivity(UUID activityId) {
         if (this.repository.findById(activityId).isPresent()) {
             this.repository.deleteById(activityId);
-            return new ResponseEntity<>(HttpStatus.OK);
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         }
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
