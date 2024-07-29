@@ -1,7 +1,9 @@
+-- V3__Create_links_table.sql
 CREATE TABLE links (
-    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    id VARCHAR(36) NOT NULL DEFAULT (UUID()),
     title VARCHAR(255) NOT NULL,
     url VARCHAR(255) NOT NULL,
-    trip_id UUID,
-    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+    trip_id CHAR(36),
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );

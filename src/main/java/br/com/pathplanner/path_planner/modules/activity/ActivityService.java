@@ -10,7 +10,6 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class ActivityService {
@@ -24,7 +23,7 @@ public class ActivityService {
         return new ActivityCreateResponse(act.getId());
     }
 
-    public ResponseEntity<ActivityDto> updateActivity(UUID activityId, ActivityRequestUpdatePayload payload) {
+    public ResponseEntity<ActivityDto> updateActivity(String activityId, ActivityRequestUpdatePayload payload) {
         Optional<Activity> actv = this.repository.findById(activityId);
 
         if (actv.isPresent()) {
@@ -43,7 +42,7 @@ public class ActivityService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<Object> deleteActivity(UUID activityId) {
+    public ResponseEntity<Object> deleteActivity(String activityId) {
         if (this.repository.findById(activityId).isPresent()) {
             this.repository.deleteById(activityId);
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
@@ -51,8 +50,7 @@ public class ActivityService {
         return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
     }
-
-    public List<ActivityDto> getAllActivitiesFromTrip(UUID tripId) {
+    public List<ActivityDto> getAllActivitiesFromTrip(String tripId) {
         List<ActivityDto> list = this.repository.findAllByTripId(tripId).stream().map(activity -> new ActivityDto(activity.getId(), activity.getTitle(), activity.getOccursAt().toString())).toList();
         return list;
     }

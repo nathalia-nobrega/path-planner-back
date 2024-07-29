@@ -1,6 +1,8 @@
+-- V7__Create_items_table.sql
 CREATE TABLE items (
-    id UUID DEFAULT RANDOM_UUID() PRIMARY KEY,
+    id CHAR(36) NOT NULL DEFAULT (UUID()),
     title VARCHAR(255) NOT NULL,
-    trip_id UUID,
-    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE
+    trip_id CHAR(36),
+    FOREIGN KEY (trip_id) REFERENCES trips(id) ON DELETE CASCADE,
+    PRIMARY KEY (id)
 );

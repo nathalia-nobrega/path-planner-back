@@ -2,12 +2,12 @@ package br.com.pathplanner.path_planner.modules.link;
 
 import br.com.pathplanner.path_planner.modules.trip.Trip;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
-import java.util.UUID;
 
 @Service
 public class LinkService {
@@ -22,12 +22,11 @@ public class LinkService {
         return new LinkCreateResponse(link.getId());
     }
 
-    public ResponseEntity<LinkDto> updateLink(UUID linkId, LinkRequestPayload payload) {
+    public ResponseEntity<LinkDto> updateLink(String linkId, LinkRequestPayload payload) {
         Optional<Link> link = this.repository.findById(linkId);
 
         if (link.isPresent()) {
             Link rawLink = link.get();
-
             rawLink.setTitle(payload.title());
             rawLink.setUrl(payload.url());
 
@@ -41,8 +40,7 @@ public class LinkService {
         return ResponseEntity.notFound().build();
     }
 
-
-    public List<LinkDto> getAllLinksFromTrip(UUID tripId) {
+    public List<LinkDto> getAllLinksFromTrip(String tripId) {
         List<LinkDto> list = this.repository.findAllByTripId(tripId).stream().map(link -> new LinkDto(link.getId(), link.getTitle(), link.getUrl())).toList();
         return list;
     }

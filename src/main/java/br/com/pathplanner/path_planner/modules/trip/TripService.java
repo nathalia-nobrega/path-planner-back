@@ -15,6 +15,7 @@ import br.com.pathplanner.path_planner.modules.link.LinkService;
 import br.com.pathplanner.path_planner.modules.user.User;
 import br.com.pathplanner.path_planner.modules.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -60,7 +61,7 @@ public class TripService {
           Optional<User> userByEmail = this.userService.findUserByEmail(payload.owner_email());
 
           if(userByEmail.isEmpty()) throw new OwnerEmailNotFoundException();
- 
+
           Trip newTrip = new Trip(payload);
 
           this.repository.save(newTrip);
@@ -68,7 +69,7 @@ public class TripService {
           return ResponseEntity.ok(new TripCreateResponse(newTrip.getId()));
       }
 
-     public ResponseEntity<TripDto> getTripDetails(@PathVariable UUID id){
+     public ResponseEntity<TripDto> getTripDetails(@PathVariable String id){
         Optional<Trip> trip = getTrip(id);
 
          if(trip.isPresent()) {
@@ -85,7 +86,7 @@ public class TripService {
     }
 
 
-    public ResponseEntity<TripDto> confirmTrip(@PathVariable UUID id){
+    public ResponseEntity<TripDto> confirmTrip(@PathVariable String id){
         Optional<Trip> trip = getTrip(id);
 
 
@@ -108,7 +109,7 @@ public class TripService {
     }
 
     // Tratar data da atividade dentro da data da viagem
-    public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+    public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable String id, @RequestBody ActivityRequestPayload payload) {
         Optional<Trip> trip = getTrip(id);
 
         if (trip.isPresent()) {
@@ -118,7 +119,7 @@ public class TripService {
         return ResponseEntity.notFound().build();
     }
 
-    public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable UUID id, @RequestBody LinkRequestPayload payload) {
+    public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable String id, @RequestBody LinkRequestPayload payload) {
         Optional<Trip> trip = getTrip(id);
 
         if (trip.isPresent()) {
@@ -129,7 +130,7 @@ public class TripService {
         return ResponseEntity.notFound().build();
     }
 
-     public ResponseEntity<ItemCreateResponse> registerItem(@PathVariable UUID id, @RequestBody ItemRequestPayload payload) {
+     public ResponseEntity<ItemCreateResponse> registerItem(@PathVariable String id, @RequestBody ItemRequestPayload payload) {
         Optional<Trip> trip = getTrip(id);
 
         if (trip.isPresent()) {
@@ -140,7 +141,7 @@ public class TripService {
         return ResponseEntity.notFound().build();
     }
 
-    private Optional<Trip> getTrip(UUID id) {
+    private Optional<Trip> getTrip(String id) {
         return this.repository.findById(id);
     }
 

@@ -1,6 +1,6 @@
 package br.com.pathplanner.path_planner.modules.items;
 
-import java.util.UUID;
+import java.io.Serializable;
 
-public record ItemDto(UUID id, String title) {
+public record ItemDto(String id, String title) {
 }

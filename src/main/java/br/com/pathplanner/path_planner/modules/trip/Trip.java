@@ -18,8 +18,8 @@ import java.util.UUID;
 @Table(name = "TRIPS")
 public class Trip {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private UUID id;
+    @GeneratedValue(strategy = GenerationType.UUID)
+    private String id;
 
     @Column(nullable = false)
     private String destination;

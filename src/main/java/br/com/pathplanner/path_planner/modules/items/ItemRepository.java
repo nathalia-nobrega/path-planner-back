@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.List;
 import java.util.UUID;
 
-public interface ItemRepository extends JpaRepository<Item, UUID> {
-    List<Item> findAllByTripId(UUID id);
+public interface ItemRepository extends JpaRepository<Item, String> {
+    List<Item> findAllByTripId(String id);
 }

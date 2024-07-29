@@ -1,6 +1,6 @@
 package br.com.pathplanner.path_planner.modules.link;
 
-import java.util.UUID;
+import java.io.Serializable;
 
-public record LinkDto(UUID id, String title, String url) {
+public record LinkDto(String id, String title, String url) {
 }

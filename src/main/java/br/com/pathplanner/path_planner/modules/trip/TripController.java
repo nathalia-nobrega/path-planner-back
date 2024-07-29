@@ -20,6 +20,7 @@ import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
@@ -64,7 +65,7 @@ public class TripController {
             }),
              @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
     })
-    public ResponseEntity<TripDto> getTripDetails(@PathVariable("id") UUID id){
+    public ResponseEntity<TripDto> getTripDetails(@PathVariable("id") String id){
         return this.service.getTripDetails(id);
     }
 
@@ -76,7 +77,7 @@ public class TripController {
             }),
              @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
     })
-    public ResponseEntity<TripDto> confirmTrip(@PathVariable UUID id){
+    public ResponseEntity<TripDto> confirmTrip(@PathVariable String id){
         return this.service.confirmTrip(id);
     }
 
@@ -91,7 +92,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
 
     })
-    public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable UUID id, @RequestBody ActivityRequestPayload payload) {
+    public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable String id, @RequestBody ActivityRequestPayload payload) {
         return this.service.registerActivity(id, payload);
     }
 
@@ -102,7 +103,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
 
     })
-    public ResponseEntity<Object> deleteActivity(@PathVariable UUID activityId) {
+    public ResponseEntity<Object> deleteActivity(@PathVariable String activityId) {
         return this.activityService.deleteActivity(activityId);
     }
 
@@ -113,7 +114,7 @@ public class TripController {
                     @Content(array = @ArraySchema(schema = @Schema(implementation = ActivityDto.class)))
             }),
     })
-    public ResponseEntity<List<ActivityDto>> getAllActivitiesByTripId(@PathVariable UUID id) {
+    public ResponseEntity<List<ActivityDto>> getAllActivitiesByTripId(@PathVariable String id) {
         List<ActivityDto> allParticipantsFromTrip = this.activityService.getAllActivitiesFromTrip(id);
         return ResponseEntity.ok(allParticipantsFromTrip);
     }
@@ -127,7 +128,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Atividade não encontrada")
 
     })
-    public ResponseEntity<ActivityDto> updateActivity(@PathVariable UUID activityId, @RequestBody ActivityRequestUpdatePayload payload) {
+    public ResponseEntity<ActivityDto> updateActivity(@PathVariable String activityId, @RequestBody ActivityRequestUpdatePayload payload) {
         return this.activityService.updateActivity(activityId, payload);
     }
 
@@ -141,7 +142,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
 
     })
-    public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable UUID id, @RequestBody LinkRequestPayload payload) {
+    public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable String id, @RequestBody LinkRequestPayload payload) {
         return this.service.registerLink(id, payload);
     }
 
@@ -154,7 +155,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Link não encontrado")
 
     })
-    public ResponseEntity<LinkDto> updateLink(@PathVariable UUID linkId, @RequestBody LinkRequestPayload payload) {
+    public ResponseEntity<LinkDto> updateLink(@PathVariable String linkId, @RequestBody LinkRequestPayload payload) {
         return this.linkService.updateLink(linkId, payload);
     }
 
@@ -166,7 +167,7 @@ public class TripController {
                     @Content(array = @ArraySchema(schema = @Schema(implementation = LinkDto.class)))
             }),
     })
-    public ResponseEntity<List<LinkDto>> getAllLinksByTripId(@PathVariable UUID id) {
+    public ResponseEntity<List<LinkDto>> getAllLinksByTripId(@PathVariable String id) {
         List<LinkDto> allLinksFromTrip = this.linkService.getAllLinksFromTrip(id);
         return ResponseEntity.ok(allLinksFromTrip);
     }
@@ -181,7 +182,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
 
     })
-    public ResponseEntity<ItemCreateResponse> registerItem(@PathVariable UUID id, @RequestBody ItemRequestPayload payload) {
+    public ResponseEntity<ItemCreateResponse> registerItem(@PathVariable String id, @RequestBody ItemRequestPayload payload) {
         return this.service.registerItem(id, payload);
     }
 
@@ -194,7 +195,7 @@ public class TripController {
             }),
              @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
     })
-    public ResponseEntity<List<ItemDto>> getAllItemsByTripId(@PathVariable UUID id) {
+    public ResponseEntity<List<ItemDto>> getAllItemsByTripId(@PathVariable String id) {
         List<ItemDto> allLinksFromTrip = this.itemService.getAllItemsFromTrip(id);
         return ResponseEntity.ok(allLinksFromTrip);
     }
@@ -206,7 +207,7 @@ public class TripController {
             @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
 
     })
-    public ResponseEntity<Object> deleteItem(@PathVariable UUID itemId) {
+    public ResponseEntity<Object> deleteItem(@PathVariable String itemId) {
         return this.itemService.deleteItem(itemId);
     }
 
