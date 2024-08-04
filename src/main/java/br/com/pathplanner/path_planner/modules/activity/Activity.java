@@ -6,14 +6,12 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.data.redis.core.RedisHash;
 
-import java.io.Serializable;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 
 
-@Entity
+@Entity(name = "activities")
 @Table(name = "activities")
 @Getter
 @Setter

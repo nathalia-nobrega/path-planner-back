@@ -32,7 +32,6 @@ Este projeto tem como objetivo ajudar os usuários a planejar suas viagens de ma
 ## Tecnologias e ferramentas
 
 <p> <a href="https://www.java.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/java/java-original.svg" alt="java" width="40" height="40"/></a> <a href="https://spring.io/" target="_blank" rel="noreferrer"> <img src="https://www.vectorlogo.zone/logos/springio/springio-icon.svg" alt="spring" width="40" height="40"/> </a> <a href="https://maven.apache.org/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/actions/starter-workflows/main/icons/maven.svg" alt="git" width="40" height="40"/> </a> <a href="https://www.mysql.com" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/mysql/mysql-original-wordmark.svg" alt="mysql" width="40" height="40"/> </a>
-<a href="https://redis.io/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/redis/redis-original-wordmark.svg" alt="redis" width="40" height="40"/> </a>
 <a href="https://www.docker.com/" target="_blank" rel="noreferrer"> <img src="https://raw.githubusercontent.com/devicons/devicon/master/icons/docker/docker-original-wordmark.svg" alt="docker" width="40" height="40"/> </a>
 </p>  
 
@@ -47,24 +46,18 @@ Antes de começar, você precisará ter as seguintes ferramentas instaladas em s
 
 ## Como Executar
 
-O Redis é utilizado como armazenamento de dados em cache. O arquivo `docker-compose.yml` contém a configuração para levantar um contêiner Redis. Além disso, também possui a configuração para um Banco de Dados MySQL.
+O arquivo `docker-compose.yml` contém a configuração para levantar um contêiner para o MySQL.
 
 
-1. Construir a imagem Docker:
-
-    ```bash
-    docker build .
-    ```
-
-2. Iniciar os contêineres com Docker Compose:
+1. Iniciar os contêineres com Docker Compose:
 
     ```bash
     docker-compose up
     ```
-3. Execute a aplicação Spring Boot com Maven: ```mvn spring-boot:run ```
+2. Execute a aplicação Spring Boot com Maven: ```mvn spring-boot:run ```
 
 
-4. A aplicação estará disponível em `http://localhost:8080`.
+3. A aplicação estará disponível em `http://localhost:8080`.
 
 ## Documentação
 

@@ -19,19 +19,20 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.UUID;
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/trips")
 @Tag(name = "Trip", description = "Informações da viagem")
 public class TripController {
-
+    private final Logger log = LoggerFactory.getLogger(getClass());
     @Autowired
     private ActivityService activityService;
 
@@ -44,6 +45,10 @@ public class TripController {
     @Autowired
     private TripService service;
 
+    @Autowired
+    private TripRepository repository;
+
+
     // TRIP CRUD
 
     @PostMapping
@@ -54,7 +59,7 @@ public class TripController {
             }),
     })
     public ResponseEntity<TripCreateResponse> createTrip(@Valid @RequestBody TripRequestPayload payload) throws StartDateInvalidException {
-        return this.service.createTrip(payload);
+        return ResponseEntity.ok(this.service.createTrip(payload));
     }
 
     @GetMapping(path = "/{id}")
@@ -66,7 +71,15 @@ public class TripController {
              @ApiResponse(responseCode = "404", description = "Viagem não encontrada")
     })
     public ResponseEntity<TripDto> getTripDetails(@PathVariable("id") String id){
-        return this.service.getTripDetails(id);
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if (trip.isPresent()) {
+            Trip rawTrip = trip.get();
+            TripDto tripDetails = this.service.getTripDetails(rawTrip);
+            return ResponseEntity.ok(tripDetails);
+
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @GetMapping(path = "/{id}/confirm")
@@ -81,7 +94,6 @@ public class TripController {
         return this.service.confirmTrip(id);
     }
 
-
     // ACTIVITY CRUD
     @PostMapping("/{id}/activities")
     @Operation(summary = "Cadastro de atividade", description = "Essa função é responsável por cadastrar uma atividade")
@@ -93,7 +105,14 @@ public class TripController {
 
     })
     public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable String id, @RequestBody ActivityRequestPayload payload) {
-        return this.service.registerActivity(id, payload);
+        Optional<Trip> trip = this.repository.findById(id);
+
+        if (trip.isPresent()) {
+            Trip rawTrip = trip.get();
+            ActivityCreateResponse response = this.service.registerActivity(payload, rawTrip);
+            return ResponseEntity.ok(response);
+        }
+        return ResponseEntity.notFound().build();
     }
 
     @DeleteMapping("/{id}/activities/{activityId}")
@@ -115,8 +134,8 @@ public class TripController {
             }),
     })
     public ResponseEntity<List<ActivityDto>> getAllActivitiesByTripId(@PathVariable String id) {
-        List<ActivityDto> allParticipantsFromTrip = this.activityService.getAllActivitiesFromTrip(id);
-        return ResponseEntity.ok(allParticipantsFromTrip);
+        List<ActivityDto> activities = this.activityService.getAllActivitiesFromTrip(id);
+        return ResponseEntity.ok(activities);
     }
 
     @PutMapping("/{id}/activities/{activityId}")

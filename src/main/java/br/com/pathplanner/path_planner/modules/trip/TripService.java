@@ -14,6 +14,8 @@ import br.com.pathplanner.path_planner.modules.link.LinkRequestPayload;
 import br.com.pathplanner.path_planner.modules.link.LinkService;
 import br.com.pathplanner.path_planner.modules.user.User;
 import br.com.pathplanner.path_planner.modules.user.UserService;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.ResponseEntity;
@@ -44,8 +46,9 @@ public class TripService {
 
     @Autowired
     private UserService userService;
+    private final Logger log = LoggerFactory.getLogger(getClass());
 
-      public ResponseEntity<TripCreateResponse> createTrip(@RequestBody TripRequestPayload payload) throws StartDateInvalidException {
+    public TripCreateResponse createTrip(@RequestBody TripRequestPayload payload) throws StartDateInvalidException {
           LocalDateTime start_date;
           LocalDateTime ends_date;
 
@@ -65,25 +68,15 @@ public class TripService {
           Trip newTrip = new Trip(payload);
 
           this.repository.save(newTrip);
+          log.info("Find all trips {}", repository.findAll());
 
-          return ResponseEntity.ok(new TripCreateResponse(newTrip.getId()));
+          return new TripCreateResponse(newTrip.getId());
       }
 
-     public ResponseEntity<TripDto> getTripDetails(@PathVariable String id){
-        Optional<Trip> trip = getTrip(id);
-
-         if(trip.isPresent()) {
-            Trip rawTrip = trip.get();
-            TripDto tripDto = new TripDto(rawTrip.getDestination(),
-                    rawTrip.getStartsAt().toString(),
-                    rawTrip.getEndsAt().toString(),
-                    rawTrip.getOwnerName(),
-                    rawTrip.getOwnerEmail(),
-                    rawTrip.getIsConfirmed());
-            return ResponseEntity.ok(tripDto);
-        }
-        return ResponseEntity.notFound().build();
-    }
+     public TripDto getTripDetails(Trip rawTrip){
+            TripDto tripDto = new TripDto(rawTrip.getDestination(), rawTrip.getStartsAt().toString(), rawTrip.getEndsAt().toString(), rawTrip.getOwnerName(), rawTrip.getOwnerEmail(), rawTrip.getIsConfirmed());
+            return tripDto;
+      }
 
 
     public ResponseEntity<TripDto> confirmTrip(@PathVariable String id){
@@ -108,15 +101,9 @@ public class TripService {
         return ResponseEntity.notFound().build();
     }
 
-    // Tratar data da atividade dentro da data da viagem
-    public ResponseEntity<ActivityCreateResponse> registerActivity(@PathVariable String id, @RequestBody ActivityRequestPayload payload) {
-        Optional<Trip> trip = getTrip(id);
-
-        if (trip.isPresent()) {
-            ActivityCreateResponse response = this.activityService.registerActitivty(payload, trip.get());
-            return ResponseEntity.ok(response);
-        }
-        return ResponseEntity.notFound().build();
+    public ActivityCreateResponse registerActivity(@RequestBody ActivityRequestPayload payload, Trip trip) {
+            ActivityCreateResponse response = this.activityService.registerActitivty(payload, trip);
+            return response;
     }
 
     public ResponseEntity<LinkCreateResponse> registerLink(@PathVariable String id, @RequestBody LinkRequestPayload payload) {
